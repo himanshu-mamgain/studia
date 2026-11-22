@@ -198,7 +198,21 @@ read at build time.
 - `VITE_REQUIRE_SIGN_IN=true`: send signed-out visitors to the Studia login first. Leave it out to
   keep the app open to everyone.
 
-Today that's **Structura**. Schemata and DSA Atlas get theirs when their account code lands.
+All three apps have the account code. Each Netlify site needs its own copy of the settings:
+
+| Site | Names |
+| --- | --- |
+| Structura (`structura-web`) | `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`, `VITE_STUDIA_URL`, `VITE_REQUIRE_SIGN_IN` |
+| DSA Atlas (`dsa-atz`) | the same `VITE_` names |
+| Schemata (`schemata-web`) | `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `NEXT_PUBLIC_STUDIA_URL`, `NEXT_PUBLIC_REQUIRE_SIGN_IN` |
+
+What each app saves in its `app_progress` row:
+
+| App (`app`) | What syncs | Stays on the device |
+| --- | --- | --- |
+| Structura (`structura`) | sections read, lessons, videos watched, bookmarks, quiz bests, roadmap ticks | voice, code language, notes key |
+| DSA Atlas (`dsa-atlas`) | problems (notes, code, revision history), checklist ticks, goals, solve-page work | theme, code language, reminder hour, notes key |
+| Schemata (`schemata`) | solved questions, answers, designs, saved queries | playground and diagram drafts, theme, datasets |
 
 ### 6. Check it
 
