@@ -1,0 +1,22 @@
+# The Studia site (web/): the home page and the shared login for Structura, Schemata
+# and DSA Atlas. A static site; Supabase handles the sign-in. It needs VITE_SUPABASE_URL
+# and VITE_SUPABASE_PUBLISHABLE_KEY (and later VITE_AUTH_COOKIE_DOMAIN=.studia.dev) in
+# the site's environment variables. See docs/accounts.md.
+[build]
+  command = "npm ci --prefix web && npm run build --prefix web"
+  publish = "web/dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# /login and /logout are pages of the one-page site.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "strict-origin-when-cross-origin"
