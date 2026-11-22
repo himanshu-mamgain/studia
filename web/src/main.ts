@@ -25,7 +25,10 @@ const brand = `<a class="brand" href="/"><img class="mark" src="/favicon.svg" al
 
 function appCards(session: Session | null) {
   return `<ul class="apps">${APPS.map(
-    (a) => `<li><a class="app card" href="${esc(a.url)}">
+    // Through the login, so you arrive signed in: it asks you to sign in first, or (signed in
+    // already) hands the app its session straight away. A plain link would open the app signed
+    // out, or even an old copy its service worker keeps from an earlier visit.
+    (a) => `<li><a class="app card" href="${configured ? `/login?app=${esc(a.id)}&amp;next=${esc(encodeURIComponent(`${a.url}/`))}` : esc(a.url)}">
       <span class="app-mark" style="background:${esc(a.color)}" aria-hidden="true">${esc(a.name[0])}</span>
       <span class="app-text"><strong>${esc(a.name)}</strong><span>${esc(a.tagline)}</span></span>
       <span class="go" aria-hidden="true">${session ? 'Open' : 'Sign in'} →</span></a></li>`,
