@@ -24,11 +24,15 @@ This repo holds what the apps share. Each app's own code stays in its repo.
   all of them.
 - [`supabase/migrations/`](supabase/migrations): the database: the `app_progress` table and its
   row-level security policies.
+- [`web/`](web): the Studia site. Its home page lists the apps; its login page signs you in once
+  with GitHub and sends you back to the app page you asked for.
 
 ## Status
 
 - [x] Studia account in Structura (sign in with GitHub, progress sync)
-- [ ] Supabase project, GitHub OAuth app and Netlify settings ([setup](docs/accounts.md#setup-once-by-the-owner))
+- [x] Supabase project and GitHub OAuth app ([setup](docs/accounts.md#setup-once-by-the-owner))
+- [ ] The Studia site on Netlify ([step 4](docs/accounts.md#4-put-the-studia-site-on-netlify))
+- [ ] Structura behind the Studia login ([step 5](docs/accounts.md#5-give-the-apps-their-settings))
 - [ ] Studia account in Schemata
 - [ ] Studia account in DSA Atlas
 - [ ] `studia.dev` and the move to subdomains ([steps](docs/domain.md))
