@@ -36,3 +36,10 @@ This repo holds what the apps share. Each app's own code stays in its repo.
 - [ ] Studia account in Schemata
 - [ ] Studia account in DSA Atlas
 - [ ] `studia.dev` and the move to subdomains ([steps](docs/domain.md))
+
+## Logo
+
+[`brand/studia-logo.svg`](brand/studia-logo.svg) (and a 512 × 512 PNG beside it): an "S" that joins
+the three apps, each in its own colour: Structura violet (`#a78bfa`), DSA Atlas green (`#34d399`)
+and Schemata blue (`#38bdf8`), on Studia green (`#557c72`). The Studia site uses it as its icon.
+GitHub shows it on the "Authorize Studia" page once it is uploaded to the OAuth app.
