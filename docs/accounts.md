@@ -3,7 +3,7 @@
 One account for Structura, Schemata and DSA Atlas: **sign in with GitHub once**, and your progress
 follows you to every device and every app.
 
-You sign in on the **Studia site** (`studia-web.netlify.app` for now, `studia.dev` later). Each app
+You sign in on the **Studia site** (`studia-hub.netlify.app` for now, `studia.dev` later). Each app
 can require it: open an app signed out and it sends you to Studia's login first, then straight back
 to the page you asked for. That is a switch in each app (`VITE_REQUIRE_SIGN_IN`); with it off, the
 app works without an account and offers the sign-in in its top bar.
@@ -48,7 +48,7 @@ another site.
 One sign-in, step by step, while the apps are on separate `netlify.app` sites:
 
 1. You open `https://structura-web.netlify.app/topic/kafka/` with no `studia-auth` cookie.
-2. Structura sends you to `https://studia-web.netlify.app/login?app=structura&next=https%3A%2F%2Fstructura-web.netlify.app%2Ftopic%2Fkafka%2F`.
+2. Structura sends you to `https://studia-hub.netlify.app/login?app=structura&next=https%3A%2F%2Fstructura-web.netlify.app%2Ftopic%2Fkafka%2F`.
 3. You tap **Continue with GitHub**. GitHub asks once whether Studia may see your profile.
 4. Back on Studia's login, Studia now has its own session (in its own `studia-auth` cookie).
 5. Studia makes a second, quick trip through GitHub for Structura (no click: GitHub already knows
@@ -106,7 +106,7 @@ These are read when the site is built, so they go in each Netlify site's environ
 | Project URL | `VITE_SUPABASE_URL` | `NEXT_PUBLIC_SUPABASE_URL` |
 | Publishable key | `VITE_SUPABASE_PUBLISHABLE_KEY` | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` |
 | Cookie domain (after the move) | `VITE_AUTH_COOKIE_DOMAIN=.studia.dev` | `NEXT_PUBLIC_AUTH_COOKIE_DOMAIN=.studia.dev` |
-| The Studia site | `VITE_STUDIA_URL=https://studia-web.netlify.app` | `NEXT_PUBLIC_STUDIA_URL=https://studia-web.netlify.app` |
+| The Studia site | `VITE_STUDIA_URL=https://studia-hub.netlify.app` | `NEXT_PUBLIC_STUDIA_URL=https://studia-hub.netlify.app` |
 | Require sign-in | `VITE_REQUIRE_SIGN_IN=true` | `NEXT_PUBLIC_REQUIRE_SIGN_IN=true` |
 
 The Studia site itself needs the first three, with `VITE_` names.
@@ -161,8 +161,8 @@ On the free plan, Supabase may pause a project after a week with no activity; ch
      https://**--schemata-web.netlify.app/**
      https://dsa-atz.netlify.app/**
      https://**--dsa-atz.netlify.app/**
-     https://studia-web.netlify.app/**
-     https://**--studia-web.netlify.app/**
+     https://studia-hub.netlify.app/**
+     https://**--studia-hub.netlify.app/**
      http://localhost:5173/**
      http://localhost:3000/**
      http://localhost:5180/**
@@ -176,12 +176,15 @@ On the free plan, Supabase may pause a project after a week with no activity; ch
 
 1. In Netlify: **Add new project → Import an existing project → GitHub**, and pick
    `himanshu-mamgain/studia`.
-2. **Project name:** `studia-web`, so the address is `https://studia-web.netlify.app`. (If you pick
-   another name, use that address in step 5 and in the Redirect URLs above.)
+2. **Project name:** `studia-hub`, so the address is `https://studia-hub.netlify.app`. (`studia` and
+   `studia-web` belong to other people. If you ever rename it, use the new address in step 5 and in
+   the Redirect URLs above.)
 3. Leave the build settings as they are: `netlify.toml` already says how to build (`web/`, publish
    `web/dist`).
 4. Before the first deploy, add two environment variables: `VITE_SUPABASE_URL` (the Project URL)
-   and `VITE_SUPABASE_PUBLISHABLE_KEY` (the publishable key). Then deploy.
+   and `VITE_SUPABASE_PUBLISHABLE_KEY` (the publishable key). Leave **"Contains secret values"
+   unticked** for both: they go into the page by design, so Netlify's secrets scan would stop the
+   build, and Netlify can't untick it later (delete the variable and add it again). Then deploy.
 5. Open the site: it should show the three apps and **Continue with GitHub**.
 
 ### 5. Give the apps their settings
@@ -191,7 +194,7 @@ variables** and add the settings from the table above. Then trigger a new deploy
 read at build time.
 
 - `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY`: turn the account on.
-- `VITE_STUDIA_URL=https://studia-web.netlify.app`: sign in and out on the Studia site.
+- `VITE_STUDIA_URL=https://studia-hub.netlify.app`: sign in and out on the Studia site.
 - `VITE_REQUIRE_SIGN_IN=true`: send signed-out visitors to the Studia login first. Leave it out to
   keep the app open to everyone.
 

@@ -11,7 +11,7 @@ each app's code is in its own repo.
   contract must land in all three apps.
 - `docs/domain.md`: the move to `studia.dev`.
 - `supabase/migrations/`: the database, the source of truth for all three apps.
-- `web/`: the **Studia site** (`studia-web.netlify.app`, later `studia.dev`): the home page, the
+- `web/`: the **Studia site** (`studia-hub.netlify.app`, later `studia.dev`): the home page, the
   shared login (`/login?app=<id>&next=<page>`) and sign-out (`/logout`). Vite and TypeScript, no
   framework. `netlify.toml` at the root builds it. `npm test --prefix web` checks where the login
   may send people (`safeNext` in `web/src/apps.ts`: only the apps' own sites and their previews).
