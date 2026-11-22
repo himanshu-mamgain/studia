@@ -31,10 +31,9 @@ This repo holds what the apps share. Each app's own code stays in its repo.
 
 - [x] Studia account in Structura (sign in with GitHub, progress sync)
 - [x] Supabase project and GitHub OAuth app ([setup](docs/accounts.md#setup-once-by-the-owner))
-- [ ] The Studia site on Netlify ([step 4](docs/accounts.md#4-put-the-studia-site-on-netlify))
-- [ ] Structura behind the Studia login ([step 5](docs/accounts.md#5-give-the-apps-their-settings))
-- [ ] Studia account in Schemata
-- [ ] Studia account in DSA Atlas
+- [x] The Studia site on Netlify (`studia-hub.netlify.app`)
+- [x] Studia account in DSA Atlas and Schemata (sign in, sync)
+- [ ] Each app's Netlify settings, to turn it on and require sign-in ([step 5](docs/accounts.md#5-give-the-apps-their-settings))
 - [ ] `studia.dev` and the move to subdomains ([steps](docs/domain.md))
 
 ## Logo
