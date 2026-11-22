@@ -21,7 +21,7 @@ function who(session: Session) {
   return { name: String(m.full_name || m.name || m.user_name || session.user.email || 'You'), login: m.user_name as string | undefined, avatar: m.avatar_url as string | undefined }
 }
 
-const brand = `<a class="brand" href="/"><span class="mark" aria-hidden="true">S</span>Studia</a>`
+const brand = `<a class="brand" href="/"><img class="mark" src="/favicon.svg" alt="" width="36" height="36" />Studia</a>`
 
 function appCards(session: Session | null) {
   return `<ul class="apps">${APPS.map(
