@@ -1,0 +1,34 @@
+{
+  "$comment": "The Studia apps. Each app keeps the same list in code (Structura: apps/web/src/ecosystem.ts; Schemata: src/ecosystem.ts; DSA Atlas: packages/shared/src/ecosystem.ts). Change it here first, then in all three. `url` is where the app lives today; `studiaUrl` is its address once studia.dev is live.",
+  "name": "Studia",
+  "domain": "studia.dev",
+  "apps": [
+    {
+      "id": "structura",
+      "name": "Structura",
+      "tagline": "System design you can see working",
+      "color": "#a78bfa",
+      "url": "https://structura-web.netlify.app",
+      "studiaUrl": "https://structura.studia.dev",
+      "repo": "https://github.com/himanshu-mamgain/structura"
+    },
+    {
+      "id": "dsa-atlas",
+      "name": "DSA Atlas",
+      "tagline": "DSA notes: brute force → optimal, complexity, revision",
+      "color": "#34d399",
+      "url": "https://dsa-atz.netlify.app",
+      "studiaUrl": "https://atlas.studia.dev",
+      "repo": "https://github.com/himanshu-mamgain/dsa-atlas"
+    },
+    {
+      "id": "schemata",
+      "name": "Schemata",
+      "tagline": "Databases: real SQL in your browser, interview questions, a roadmap",
+      "color": "#38bdf8",
+      "url": "https://schemata-web.netlify.app",
+      "studiaUrl": "https://schemata.studia.dev",
+      "repo": "https://github.com/himanshu-mamgain/schemata"
+    }
+  ]
+}
