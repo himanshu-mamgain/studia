@@ -28,7 +28,7 @@ everywhere, or the apps won't share a sign-in:
 | Cookie domain | `.studia.dev` once the apps live there; not set before that | A cookie on `.studia.dev` is sent to every subdomain |
 | Cookie settings | `path=/`, `SameSite=Lax`, `Secure` on HTTPS, kept 400 days | The same in every app |
 | Progress table | `public.app_progress (user_id, app, data, updated_at)` | One row per user per app |
-| App ids | `structura`, `schemata`, `dsa-atlas` | The `app` column; the table refuses others |
+| App ids | `structura`, `schemata`, `dsa-atlas`, and `studia` for the Studia site's daily plan | The `app` column; the table refuses others |
 | Signing out | `supabase.auth.signOut({ scope: 'local' })` | Signs out of this browser (and every subdomain sharing the cookie), not every device |
 
 ### How signing in works

@@ -11,6 +11,13 @@ each app's code is in its own repo.
   contract must land in all three apps.
 - `docs/domain.md`: the move to `studia.dev`.
 - `supabase/migrations/`: the database, the source of truth for all three apps.
+- **The daily plan** (`web/src/plan.ts`, page `/today` in `web/src/today.ts`): one checklist a day across the
+  three apps, from 25 Nov 2026 to the owner's goal on 1 Aug 2027, in four phases. A queue, not a calendar:
+  each day takes the next unfinished items at its weekday's quota, so missed items come back by themselves.
+  Items tick themselves from each app's synced row; Studia keeps its own row (`app = 'studia'`: each day's
+  list, hand ticks, history). The study lists come from each app's published JSON (Structura `/topics.json`,
+  DSA Atlas `/checklist.json`, Schemata `/plan.json`), refreshed into `web/src/content.json` by
+  `web/scripts/content.mjs` before each build. `npm test --prefix web` checks the plan.
 - `web/`: the **Studia site** (`studia-hub.netlify.app`, later `studia.dev`): the home page, the
   shared login (`/login?app=<id>&next=<page>`) and sign-out (`/logout`). Vite and TypeScript, no
   framework. `netlify.toml` at the root builds it. `npm test --prefix web` checks where the login
