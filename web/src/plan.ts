@@ -110,10 +110,10 @@ export const phaseOf = (date: string) => PHASES.find((p) => date <= p.until) ?? 
 
 //                 Sun Mon Tue Wed Thu Fri Sat
 const NEW_DSA = [1, 1, 1, 1, 1, 1, 2]
-const NEW_STRUCTURA = [1, 0, 1, 0, 1, 0, 1]
+const NEW_STRUCTURA = [1, 1, 1, 1, 1, 1, 1] // one topic every day (the owner's choice)
 const NEW_SCHEMATA = [1, 1, 0, 1, 0, 1, 1]
 
-/** New items a day, before Sunday's catch-up. About 16 weeks to finish all three. */
+/** New items a day, before Sunday's catch-up. Topics finish in about 9 weeks, problems in about 17. */
 export function quota(date: string) {
   const w = weekday(date)
   return { dsa: NEW_DSA[w], structura: NEW_STRUCTURA[w], schemata: NEW_SCHEMATA[w] }
