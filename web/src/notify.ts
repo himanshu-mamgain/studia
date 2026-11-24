@@ -50,8 +50,13 @@ export function reminders(d: TodayData, now = Date.now()): Notice[] {
 
 const supported = () => 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window
 
+/**
+ * The service worker, once it's running. Subscribing straight after register() fails on Chrome
+ * ("no active Service Worker"), so wait for ready.
+ */
 async function subscription() {
-  const reg = await navigator.serviceWorker.register('/sw.js')
+  await navigator.serviceWorker.register('/sw.js')
+  const reg = await navigator.serviceWorker.ready
   return { reg, sub: await reg.pushManager.getSubscription() }
 }
 
@@ -98,11 +103,13 @@ export async function mountNotify(box: HTMLElement, getData: () => TodayData) {
         const { reg } = await subscription()
         const fresh = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: key(publicKey) })
         const saved = await send({ subscription: fresh.toJSON(), queue: reminders(getData()) })
-        if (!saved.ok) throw new Error('The server didn\'t save your reminders. Try again.')
-        await send({ subscription: fresh.toJSON(), test: true })
+        if (!saved.ok) throw new Error(`The server didn't save your reminders (${saved.status}). Try again.`)
+        const test = await send({ subscription: fresh.toJSON(), test: true })
+        if (!test.ok) throw new Error((await test.json().catch(() => ({}))).error ?? 'The test notification failed.')
         void mountNotify(box, getData)
       } catch (e) {
-        error.textContent = (e as Error).message
+        const message = (e as Error).message
+        error.textContent = /permission|denied/i.test(message) && Notification.permission !== 'granted' ? 'Notifications weren\'t allowed. Allow them for this site in Chrome\'s site settings, then try again.' : message
       }
     })
     return
@@ -110,8 +117,13 @@ export async function mountNotify(box: HTMLElement, getData: () => TodayData) {
   const next = reminders(getData())[0]
   card(`<p>Reminders are on: ${times}.</p>
     ${next ? `<p class="muted">Next: ${new Date(next.at).toLocaleString('en-IN', { weekday: 'short', hour: 'numeric', minute: '2-digit' })}, "${next.title}".</p>` : ''}
-    <p class="row"><button type="button" class="btn" id="push-test">Send a test</button> <button type="button" class="btn" id="push-off">Turn off</button></p>`)
-  box.querySelector('#push-test')!.addEventListener('click', () => void send({ subscription: sub!.toJSON(), test: true }))
+    <p class="row"><button type="button" class="btn" id="push-test">Send a test</button> <button type="button" class="btn" id="push-off">Turn off</button></p>
+    <p class="muted small" id="push-note" aria-live="polite"></p>`)
+  box.querySelector('#push-test')!.addEventListener('click', async () => {
+    const res = await send({ subscription: sub!.toJSON(), test: true }).catch(() => null)
+    const note = box.querySelector('#push-note')!
+    note.textContent = res?.ok ? 'Test sent. It should arrive in a few seconds.' : `The test didn't go through${res ? ` (${(await res.json().catch(() => ({}))).error ?? res.status})` : ''}.`
+  })
   box.querySelector('#push-off')!.addEventListener('click', async () => {
     await fetch('/api/push', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ endpoint: sub!.endpoint }) }).catch(() => undefined)
     await sub!.unsubscribe()

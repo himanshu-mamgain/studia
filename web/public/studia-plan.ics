@@ -1,0 +1,61 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Studia//Daily plan//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Studia daily plan
+BEGIN:VTIMEZONE
+TZID:Asia/Kolkata
+BEGIN:STANDARD
+DTSTART:19700101T000000
+TZOFFSETFROM:+0530
+TZOFFSETTO:+0530
+TZNAME:IST
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+UID:studia-plan-am@studia-hub.netlify.app
+DTSTAMP:20261124T160000Z
+DTSTART;TZID=Asia/Kolkata:20261125T110000
+DTEND;TZID=Asia/Kolkata:20261125T111500
+RRULE:FREQ=DAILY;UNTIL=20270801T235959Z
+SUMMARY:Studia: today's plan
+DESCRIPTION:Open today's checklist: Structura, DSA Atlas and Schemata.\nhttps://studia-hub.netlify.app/today
+URL:https://studia-hub.netlify.app/today
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Studia: today's plan
+TRIGGER:-PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:studia-plan-pm@studia-hub.netlify.app
+DTSTAMP:20261124T160000Z
+DTSTART;TZID=Asia/Kolkata:20261125T170000
+DTEND;TZID=Asia/Kolkata:20261125T171500
+RRULE:FREQ=DAILY;UNTIL=20270801T235959Z
+SUMMARY:Studia: what's left today
+DESCRIPTION:Finish what's left on today's list.\nhttps://studia-hub.netlify.app/today
+URL:https://studia-hub.netlify.app/today
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Studia: what's left today
+TRIGGER:-PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:studia-plan-night@studia-hub.netlify.app
+DTSTAMP:20261124T160000Z
+DTSTART;TZID=Asia/Kolkata:20261125T213000
+DTEND;TZID=Asia/Kolkata:20261125T214500
+RRULE:FREQ=DAILY;UNTIL=20270801T235959Z
+SUMMARY:Studia: day check-in
+DESCRIPTION:Tick off what you did. Anything left moves to tomorrow.\nhttps://studia-hub.netlify.app/today
+URL:https://studia-hub.netlify.app/today
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Studia: day check-in
+TRIGGER:-PT0M
+END:VALARM
+END:VEVENT
+END:VCALENDAR

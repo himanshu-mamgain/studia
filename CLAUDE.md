@@ -23,6 +23,10 @@ each app's code is in its own repo.
   to `/api/push`, which keeps them in Netlify Blobs; `push-send` sends what's due every 15 minutes. Never
   send progress to the functions. Needs `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY` and `VAPID_SUBJECT` in
   Netlify's environment variables (set by the owner; never in this repo). `npm test` at the root checks both.
+- **Look and app** (`web/src/sketch.ts`, `web/public/manifest.webmanifest`, `web/public/sw.js`): hand-drawn
+  outlines with rough.js, like Structura's diagrams (cards, buttons, tasks, the ring, bars and ticks); an
+  installable app (manifest, icons, an Install button; on iPhone, Share → Add to Home Screen) that opens offline;
+  dark mode; and `web/public/studia-plan.ics`, three daily calendar events (11:00, 17:00, 21:30 to 1 Aug 2027).
 - `web/`: the **Studia site** (`studia-hub.netlify.app`, later `studia.dev`): the home page, the
   shared login (`/login?app=<id>&next=<page>`) and sign-out (`/logout`). Vite and TypeScript, no
   framework. `netlify.toml` at the root builds it. `npm test --prefix web` checks where the login
