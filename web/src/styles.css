@@ -359,3 +359,9 @@ section.card:not(.center):not(.user),
 .today-link {
   padding: 18px 16px;
 }
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}

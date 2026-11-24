@@ -4,6 +4,7 @@ import { createClient, type Session } from '@supabase/supabase-js'
 import { APPS, appById, safeNext, type StudiaApp } from './apps.ts'
 import { configured, COOKIE_DOMAIN, COOKIE_NAME, SUPABASE_KEY, SUPABASE_URL } from './config.ts'
 import { loadToday, renderToday, save, toggle, type TodayData } from './today.ts'
+import { mountNotify, refresh } from './notify.ts'
 
 // The Studia site: the home page (/), the daily plan (/today, today.ts), the shared login
 // (/login?app=…&next=…) and sign-out (/logout). An app sends a signed-out learner to /login with the page they wanted; after
@@ -187,12 +188,16 @@ async function showToday(session: Session) {
         data = { ...data, state: toggle(data.state, b.dataset.key!) }
         draw()
         void save(supabase!, session, data.state)
+        void refresh(data)
       }),
     )
+    const box = document.getElementById('notify')
+    if (box) void mountNotify(box, () => data)
   }
   const load = async () => {
     data = await loadToday(supabase!, session)
     draw()
+    void refresh(data)
   }
   await load()
   // Finished something in an app? It ticks itself when you come back.

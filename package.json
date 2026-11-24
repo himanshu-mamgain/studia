@@ -1,0 +1,20 @@
+{
+  "name": "studia",
+  "private": true,
+  "type": "module",
+  "description": "The Studia site (web/) and its push functions (netlify/).",
+  "scripts": {
+    "test": "tsx --test netlify/lib/*.test.ts && npm test --prefix web"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^11.1.8",
+    "web-push": "^4.0.0"
+  },
+  "devDependencies": {
+    "@netlify/functions": "^6.1.1",
+    "@types/node": "^26.6.6",
+    "@types/web-push": "^3.6.4",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  }
+}
