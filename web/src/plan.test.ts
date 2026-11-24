@@ -23,10 +23,10 @@ describe('the plan', () => {
     assert.deepEqual(PHASES.map((p) => p.until), ['2027-03-21', '2027-04-30', '2027-06-15', '2027-08-01'])
   })
 
-  it('gives 8 problems, 4 topics and 5 Schemata items a week', () => {
+  it('gives 8 problems, 7 topics and 5 Schemata items a week', () => {
     const week = Array.from({ length: 7 }, (_, i) => quota(addDays('2026-11-29', i)))
     const sum = (k: 'dsa' | 'structura' | 'schemata') => week.reduce((n, q) => n + q[k], 0)
-    assert.deepEqual([sum('dsa'), sum('structura'), sum('schemata')], [8, 4, 5])
+    assert.deepEqual([sum('dsa'), sum('structura'), sum('schemata')], [8, 7, 5])
   })
 
   it('finishes all 134 problems, 62 topics and 64 Schemata items in the first phase if you keep up', () => {
@@ -44,7 +44,7 @@ describe('the plan', () => {
   it('starts with the first item of each queue, at Wednesday\'s quota', () => {
     assert.equal(weekday(START), 3)
     const day = makeDay(START, none(), emptyState())
-    assert.deepEqual(keys(day), [`dsa:${CONTENT.dsa[0].id}`, `schemata:lesson:${CONTENT.schemata.lessons[0].id}`])
+    assert.deepEqual(keys(day), [`dsa:${CONTENT.dsa[0].id}`, `structura:${CONTENT.structura[0].id}`, `schemata:lesson:${CONTENT.schemata.lessons[0].id}`])
   })
 
   it('brings back what you missed, without piling up', () => {
