@@ -1,0 +1,18 @@
+{
+  "name": "Studia: your daily plan",
+  "short_name": "Studia",
+  "description": "One checklist a day across Structura, DSA Atlas and Schemata, with reminders at 11:00, 17:00 and 21:30.",
+  "id": "/",
+  "start_url": "/today",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f7f5ef",
+  "theme_color": "#557c72",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [{ "name": "Today's plan", "url": "/today", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] }]
+}

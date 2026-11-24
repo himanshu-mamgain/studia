@@ -22,6 +22,25 @@
   to = "/index.html"
   status = 200
 
+# The service worker must always be checked for updates, so new versions reach installed apps.
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/manifest.webmanifest"
+  [headers.values]
+    Content-Type = "application/manifest+json"
+    Cache-Control = "no-cache"
+
+# The daily plan's repeating events (web/public/studia-plan.ics), for "Add to calendar".
+[[headers]]
+  for = "/studia-plan.ics"
+  [headers.values]
+    Content-Type = "text/calendar; charset=utf-8"
+    Content-Disposition = "attachment; filename=studia-plan.ics"
+
 [[headers]]
   for = "/*"
   [headers.values]

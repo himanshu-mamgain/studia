@@ -5,6 +5,7 @@ import { APPS, appById, safeNext, type StudiaApp } from './apps.ts'
 import { configured, COOKIE_DOMAIN, COOKIE_NAME, SUPABASE_KEY, SUPABASE_URL } from './config.ts'
 import { loadToday, renderToday, save, toggle, type TodayData } from './today.ts'
 import { mountNotify, refresh } from './notify.ts'
+import { sketchAll } from './sketch.ts'
 
 // The Studia site: the home page (/), the daily plan (/today, today.ts), the shared login
 // (/login?app=…&next=…) and sign-out (/logout). An app sends a signed-out learner to /login with the page they wanted; after
@@ -16,14 +17,60 @@ const path = location.pathname.replace(/\/+$/, '') || '/'
 const query = new URLSearchParams(location.search)
 
 const esc = (s: string) => s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`)
-const view = (html: string) => (root.innerHTML = html)
+const view = (html: string) => {
+  root.innerHTML = html
+  wireInstall()
+}
+// Hand-drawn outlines (sketch.ts) for whatever the page draws, including cards added later.
+let sketching = 0
+new MutationObserver(() => {
+  cancelAnimationFrame(sketching)
+  sketching = requestAnimationFrame(() => sketchAll(root))
+}).observe(root, { childList: true, subtree: true })
+
+// ---------- Install as an app ----------
+// Chrome and Edge offer an install prompt we can show from our own button; iPhone has none, so
+// the button there explains Share → Add to Home Screen. Hidden once installed.
+type InstallPrompt = Event & { prompt: () => Promise<void>; userChoice: Promise<{ outcome: string }> }
+let installPrompt: InstallPrompt | null = null
+const standalone = () => matchMedia('(display-mode: standalone)').matches || (navigator as { standalone?: boolean }).standalone === true
+const ios = /iphone|ipad|ipod/i.test(navigator.userAgent)
+addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault()
+  installPrompt = e as InstallPrompt
+  wireInstall()
+})
+addEventListener('appinstalled', () => {
+  installPrompt = null
+  wireInstall()
+})
+if ('serviceWorker' in navigator) void navigator.serviceWorker.register('/sw.js').catch(() => undefined)
+
+function wireInstall() {
+  const button = document.getElementById('install') as HTMLButtonElement | null
+  if (!button) return
+  button.hidden = standalone() || !(installPrompt || ios)
+  button.onclick = async () => {
+    if (installPrompt) {
+      await installPrompt.prompt()
+      await installPrompt.userChoice
+      installPrompt = null
+      wireInstall()
+      return
+    }
+    const hint = document.getElementById('install-hint')
+    if (hint) hint.hidden = !hint.hidden
+  }
+}
 
 function who(session: Session) {
   const m = session.user.user_metadata ?? {}
   return { name: String(m.full_name || m.name || m.user_name || session.user.email || 'You'), login: m.user_name as string | undefined, avatar: m.avatar_url as string | undefined }
 }
 
-const brand = `<a class="brand" href="/"><img class="mark" src="/favicon.svg" alt="" width="36" height="36" />Studia</a>`
+const brand = `<header class="topbar"><a class="brand" href="/"><img class="mark" src="/favicon.svg" alt="" width="36" height="36" />Studia</a>
+  <button type="button" class="btn install" id="install" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>Install app</button></header>
+  <p class="card install-hint" id="install-hint" hidden>On iPhone: tap <b>Share</b>, then <b>Add to Home Screen</b>. Open Studia from there to get reminders.</p>`
 
 function appCards(session: Session | null) {
   return `<ul class="apps">${APPS.map(
@@ -172,7 +219,7 @@ async function start() {
       <p class="muted">Studia brings together three learning apps. Sign in once with GitHub, and your progress follows you to every device.</p>
       ${session ? '' : `<p class="error" id="error">${failed ? esc(failed) : ''}</p>${signInButton()}${fine}`}
     </section>
-    ${session ? `<a class="card today-link" href="/today"><strong>Today's plan →</strong><span class="muted">Your checklist for the day across all three apps, to 1 August 2027.</span></a>` : ''}
+    ${session ? `<a class="today-link" href="/today"><span><strong>Today's plan</strong><br /><span class="muted">Your checklist across all three apps, to 1 August 2027.</span></span><span aria-hidden="true">→</span></a>` : ''}
     ${session ? userBox(session) : ''}
     ${appCards(session)}`)
   document.getElementById('signin')?.addEventListener('click', () => void signIn())
