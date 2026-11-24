@@ -18,6 +18,11 @@ each app's code is in its own repo.
   list, hand ticks, history). The study lists come from each app's published JSON (Structura `/topics.json`,
   DSA Atlas `/checklist.json`, Schemata `/plan.json`), refreshed into `web/src/content.json` by
   `web/scripts/content.mjs` before each build. `npm test --prefix web` checks the plan.
+- **Reminders** (`web/src/notify.ts`, `web/public/sw.js`, `netlify/functions`): 11:00, 17:00 and 21:30 in
+  the learner's time. The Today page works out the texts for today and the next 7 days and sends only those
+  to `/api/push`, which keeps them in Netlify Blobs; `push-send` sends what's due every 15 minutes. Never
+  send progress to the functions. Needs `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY` and `VAPID_SUBJECT` in
+  Netlify's environment variables (set by the owner; never in this repo). `npm test` at the root checks both.
 - `web/`: the **Studia site** (`studia-hub.netlify.app`, later `studia.dev`): the home page, the
   shared login (`/login?app=<id>&next=<page>`) and sign-out (`/logout`). Vite and TypeScript, no
   framework. `netlify.toml` at the root builds it. `npm test --prefix web` checks where the login

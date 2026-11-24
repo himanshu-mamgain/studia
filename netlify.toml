@@ -6,6 +6,13 @@
   command = "npm ci --prefix web && npm run build --prefix web"
   publish = "web/dist"
 
+# The daily plan's reminders (11:00, 17:00 and 21:30): /api/push stores each browser's upcoming
+# reminder texts, and push-send sends them every 15 minutes. Needs VAPID_PUBLIC_KEY,
+# VAPID_PRIVATE_KEY and VAPID_SUBJECT in the site's environment variables; without them push is off.
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
 [build.environment]
   NODE_VERSION = "22"
 
