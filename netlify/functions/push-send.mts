@@ -1,6 +1,6 @@
 import { getStore } from '@netlify/blobs'
 import type { Config } from '@netlify/functions'
-import webpush from 'web-push'
+import { sendNotification } from 'web-push'
 import { afterSend, dueNotices, isGone, payload, type PushRecord } from '../lib/push.ts'
 import { vapid } from '../lib/vapid.ts'
 
@@ -23,7 +23,7 @@ export default async () => {
     for (const notice of due) {
       try {
         // Held by the push service for up to 3 hours if the phone is offline.
-        await webpush.sendNotification(record.subscription, payload(notice), { TTL: 3 * 60 * 60 })
+        await sendNotification(record.subscription, payload(notice), { TTL: 3 * 60 * 60 })
         sent.push(notice.id)
       } catch (error) {
         if (isGone((error as { statusCode?: number }).statusCode)) {
