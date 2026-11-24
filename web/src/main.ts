@@ -3,9 +3,10 @@ import { createBrowserClient } from '@supabase/ssr'
 import { createClient, type Session } from '@supabase/supabase-js'
 import { APPS, appById, safeNext, type StudiaApp } from './apps.ts'
 import { configured, COOKIE_DOMAIN, COOKIE_NAME, SUPABASE_KEY, SUPABASE_URL } from './config.ts'
+import { loadToday, renderToday, save, toggle, type TodayData } from './today.ts'
 
-// The Studia site: the home page (/), the shared login (/login?app=…&next=…) and sign-out
-// (/logout). An app sends a signed-out learner to /login with the page they wanted; after
+// The Studia site: the home page (/), the daily plan (/today, today.ts), the shared login
+// (/login?app=…&next=…) and sign-out (/logout). An app sends a signed-out learner to /login with the page they wanted; after
 // GitHub, Studia sends them straight back to it, signed in.
 
 const root = document.getElementById('app')!
@@ -151,6 +152,18 @@ async function start() {
     return
   }
 
+  if (path === '/today') {
+    if (!session) {
+      view(`${brand}<section class="card center login"><h1>Your daily plan</h1>
+        <p class="muted">Sign in to see today's checklist from Structura, DSA Atlas and Schemata.</p>
+        <p class="error" id="error"></p>${signInButton()}${fine}</section>`)
+      document.getElementById('signin')!.addEventListener('click', () => void signIn())
+      return
+    }
+    await showToday(session)
+    return
+  }
+
   // Home.
   view(`${brand}
     <section class="hero">
@@ -158,9 +171,34 @@ async function start() {
       <p class="muted">Studia brings together three learning apps. Sign in once with GitHub, and your progress follows you to every device.</p>
       ${session ? '' : `<p class="error" id="error">${failed ? esc(failed) : ''}</p>${signInButton()}${fine}`}
     </section>
+    ${session ? `<a class="card today-link" href="/today"><strong>Today's plan →</strong><span class="muted">Your checklist for the day across all three apps, to 1 August 2027.</span></a>` : ''}
     ${session ? userBox(session) : ''}
     ${appCards(session)}`)
   document.getElementById('signin')?.addEventListener('click', () => void signIn())
+}
+
+/** The Today page: draws it, saves hand ticks, and reloads when you come back from an app. */
+async function showToday(session: Session) {
+  let data: TodayData
+  const draw = () => {
+    view(`${brand}${renderToday(data)}`)
+    root.querySelectorAll<HTMLButtonElement>('button.tick:not([disabled])').forEach((b) =>
+      b.addEventListener('click', () => {
+        data = { ...data, state: toggle(data.state, b.dataset.key!) }
+        draw()
+        void save(supabase!, session, data.state)
+      }),
+    )
+  }
+  const load = async () => {
+    data = await loadToday(supabase!, session)
+    draw()
+  }
+  await load()
+  // Finished something in an app? It ticks itself when you come back.
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') void load()
+  })
 }
 
 void start()
