@@ -1,6 +1,6 @@
 import { getStore } from '@netlify/blobs'
 import type { Config } from '@netlify/functions'
-import webpush from 'web-push'
+import { sendNotification } from 'web-push'
 import { keyFor, parseQueue, parseSubscription, payload, type PushRecord, upsert } from '../lib/push.ts'
 import { vapid } from '../lib/vapid.ts'
 
@@ -37,7 +37,7 @@ export default async (req: Request) => {
 
   if (body.test === true) {
     try {
-      await webpush.sendNotification(subscription, payload({ id: `test:${now}`, kind: 'test', at: now, title: 'Reminders are on', body: 'Studia will remind you at 11:00, 17:00 and 21:30. Tap to open today\'s plan.', url: '/today' }), { TTL: 600 })
+      await sendNotification(subscription, payload({ id: `test:${now}`, kind: 'test', at: now, title: 'Reminders are on', body: 'Studia will remind you at 11:00, 17:00 and 21:30. Tap to open today\'s plan.', url: '/today' }), { TTL: 600 })
       return json({ ok: true })
     } catch (error) {
       return json({ error: `The push service said ${(error as { statusCode?: number }).statusCode ?? 'no'}.` }, 502)
